@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  pocketd:
+    build:
+      context: .
+    image: pocketd-node:v0.1.6
+    container_name: pocket-node
+    entrypoint: ["bash", "/start-node.sh"]
+    restart: unless-stopped
+    environment:
+      - DAEMON_NAME=pocketd
+      - DAEMON_HOME=/home/pocket/.pocket
+      - DAEMON_RESTART_AFTER_UPGRADE=true
+      - DAEMON_ALLOW_DOWNLOAD_BINARIES=true
+      - UNSAFE_SKIP_BACKUP=true
+      - NETWORK=
+      - EXTERNAL_IP=
+      - NODE_MONIKER=
+      - POCKETD_LOG_LEVEL=info
+      - USE_SNAPSHOT=true
+    ports:
+      - "26656:26656"  # P2P
+      - "26657:26657"  # RPC
+      - "26660:26660"  # Prometheus metrics
+    volumes:
+      - ./data:/home/pocket/.pocket/data
+      - ./config:/home/pocket/.pocket/config
