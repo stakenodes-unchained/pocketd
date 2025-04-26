@@ -14,7 +14,7 @@ ENV POCKET_USER=pocket \
 
 # Install dependencies and create user
 RUN apt-get update && apt-get install -y \
-    curl wget jq tar zstd aria2 sudo ca-certificates bash git && \
+    curl wget jq tar zstd aria2 vim sudo ca-certificates bash git && \
     useradd -m -s /bin/bash $POCKET_USER && \
     mkdir -p /home/$POCKET_USER/.local/bin && \
     chown -R $POCKET_USER:$POCKET_USER /home/$POCKET_USER && \
