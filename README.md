@@ -58,6 +58,16 @@ The following variables are set inside the Dockerfile to configure the node:
 | `COSMOVISOR_VERSION` | Version of Cosmovisor to install | `v1.6.0` |
 | `POCKETD_VERSION` | Version of Pocket Daemon to install | `v0.1.6` |
 
+### Required Runtime Environment Variables
+
+Before starting the node, ensure the following environment variables are set either through your `docker-compose.yml`
+
+| Variable | Description | Example Values |
+|:---------|:------------|:---------------|
+| `NETWORK` | Defines the target Pocket Network environment. | `testnet-alpha`, `testnet-beta`, `testnet-mainnet` |
+| `EXTERNAL_IP` | The external IP address of the server running the node. | `192.0.2.1` |
+| `NODE_MONIKER` | Human-readable name for your node (for identification in network explorers). | `my-pocket-node` |
+
 ## Scripts
 
 | Script | Purpose |
@@ -85,18 +95,21 @@ The following variables are set inside the Dockerfile to configure the node:
    git clone https://github.com/stakenodes-unchained/pocketd.git
    cd pocketd
    ```
-
-3. **Build the Docker Image**:
+3. **Set the REQUIRED runtime environment variables in the docker-compose.yml file**
+   ```bash
+   vi docker-compose.yml
+   ```
+4. **Build the Docker Image**:
    ```bash
    docker compose build
    ```
 
-4. **Start the Node**:
+5. **Start the Node**:
    ```bash
    docker compose up -d
    ```
 
-5. **Monitor Logs**:
+6. **Monitor Logs**:
    ```bash
    docker compose logs -f pocketd
    ```
