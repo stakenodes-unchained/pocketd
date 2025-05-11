@@ -1,12 +1,24 @@
 version: "3.8"
 
 services:
+  init-volumes:
+    image: alpine:3.18
+    container_name: pocketd-volume-init
+    command: chown -R 1025:1025 /data /config
+    volumes:
+      - pocketd_data:/data
+      - pocketd_config:/config
+    restart: "no"
+    
   pocketd:
     build:
       context: .
     image: pocketd:v0.1.6
     container_name: pocketd-node
+    user: 1025:1025
     entrypoint: ["bash", "/start-node.sh"]
+    depends_on:
+      - init-volumes
     restart: unless-stopped
     environment:
       - DAEMON_NAME=pocketd
