@@ -63,7 +63,7 @@ else
   [ -z "$SEEDS" ] && { print_color $BOLD_RED "❌ Failed to fetch seeds."; exit 1; }
   print_color $BOLD_GREEN "🌱 Seeds fetched successfully"
 
-  "$POCKET_BIN" init "$NODE_MONIKER" --chain-id="$CHAIN_ID" --home=$HOME/.pocket
+  "$POCKET_BIN" init "$NODE_MONIKER" --chain-id="$CHAIN_ID" --home=$HOME/.pocket >/dev/null 2>&1
   cp "$GENESIS_FILE" $HOME/.pocket/config/genesis.json
   sed -i -e "s|^seeds *=.*|seeds = \"$SEEDS\"|" $HOME/.pocket/config/config.toml
   sed -i -e "s|^external_address *=.*|external_address = \"$EXTERNAL_IP:26656\"|" $HOME/.pocket/config/config.toml
