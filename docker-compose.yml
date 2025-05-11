@@ -4,8 +4,8 @@ services:
   pocketd:
     build:
       context: .
-    image: pocketd-node:v0.1.6
-    container_name: pocket-node
+    image: pocketd:v0.1.6
+    container_name: pocketd-node
     entrypoint: ["bash", "/start-node.sh"]
     restart: unless-stopped
     environment:
@@ -24,5 +24,9 @@ services:
       - "26657:26657"  # RPC
       - "26660:26660"  # Prometheus metrics
     volumes:
-      - ./data:/home/pocket/.pocket/data
-      - ./config:/home/pocket/.pocket/config
+      - pocketd_data:/home/pocket/.pocket/data
+      - pocketd_config:/home/pocket/.pocket/config
+
+volumes:
+  pocketd_data:
+  pocketd_config:
