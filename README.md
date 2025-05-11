@@ -62,11 +62,19 @@ The following variables are set inside the Dockerfile to configure the node:
 
 Before starting the node, ensure the following environment variables are set either through your `docker-compose.yml`
 
-| Variable | Description | Example Values |
-|:---------|:------------|:---------------|
-| `NETWORK` | Defines the target Pocket Network environment. | `testnet-alpha`, `testnet-beta`, `testnet-mainnet` |
-| `EXTERNAL_IP` | The external IP address of the server running the node. | `192.0.2.1` |
-| `NODE_MONIKER` | Human-readable name for your node (for identification in network explorers). | `my-pocket-node` |
+| Variable         | Description                                                                 | Example Values             |
+|:----------------|:----------------------------------------------------------------------------|:---------------------------|
+| `NETWORK`        | Defines the target Pocket Network environment.                              | `testnet-alpha`, `testnet-beta`, `mainnet` |
+| `EXTERNAL_IP`    | The external IP address of the server running the node.                     | `192.0.2.1`                |
+| `NODE_MONIKER`   | Human-readable name for your node (for identification in network explorers).| `my-pocket-node`          |
+| `USE_SNAPSHOT`   | Enables syncing from a snapshot instead of genesis.                         | `true`, `false` (default: `true`) |
+| `RESNAPSHOT`     | Forces snapshot re-download even if data exists (preserves priv key state). | `true`, `false` (default: `false`) |
+| `SNAPSHOT_TYPE`  | Specifies the snapshot type to use.                                          | `archival`, `pruned` (default: `archival`) |
+
+### 💡 Tips
+
+- Use `RESNAPSHOT=true` if your node becomes corrupted or stuck and you want to **force a fresh state sync** using the latest snapshot. Your `priv_validator_state.json` will be preserved to retain node identity.
+- Set `SNAPSHOT_TYPE=pruned` if you want to **reduce storage usage** by skipping historical data. This is suitable for nodes that do not require archival state (e.g., most relay nodes).
 
 ## Scripts
 
