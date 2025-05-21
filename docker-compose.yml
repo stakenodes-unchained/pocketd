@@ -4,12 +4,12 @@ services:
   init-volumes:
     image: alpine:3.18
     container_name: pocketd-volume-init
-    command: chown -R 1025:1025 /data /config
+    command: chown -R 1025:1025 /data /config /keyring-test
     volumes:
       - pocketd_data:/data
       - pocketd_config:/config
     restart: "no"
-    
+
   pocketd:
     build:
       context: .
@@ -38,7 +38,9 @@ services:
     volumes:
       - pocketd_data:/home/pocket/.pocket/data
       - pocketd_config:/home/pocket/.pocket/config
+      - pocketd_keyring:/home/pocket/.pocket/keyring-test
 
 volumes:
   pocketd_data:
   pocketd_config:
+  pocketd_keyring:
