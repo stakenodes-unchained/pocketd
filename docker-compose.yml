@@ -13,7 +13,7 @@ services:
   pocketd:
     build:
       context: .
-    image: pocketd:v0.1.6
+    image: pocketd:v0.1.11
     container_name: pocketd-node
     user: 1025:1025
     entrypoint: ["bash", "/start-node.sh"]
