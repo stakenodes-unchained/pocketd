@@ -14,7 +14,7 @@ ENV POCKET_USER=pocket \
     DAEMON_ALLOW_DOWNLOAD_BINARIES=true \
     UNSAFE_SKIP_BACKUP=true \
     COSMOVISOR_VERSION=v1.6.0 \
-    POCKETD_VERSION=v0.1.6 \
+    POCKETD_VERSION=v0.1.11 \
     HOME=/home/pocket
 
 # Install dependencies and create user
