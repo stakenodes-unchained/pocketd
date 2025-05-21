@@ -8,6 +8,7 @@ services:
     volumes:
       - pocketd_data:/data
       - pocketd_config:/config
+      - pocketd_keyring:/keyring-test
     restart: "no"
 
   pocketd:
