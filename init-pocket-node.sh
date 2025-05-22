@@ -67,7 +67,7 @@ else
   cp "$GENESIS_FILE" $HOME/.pocket/config/genesis.json
   sed -i -e "s|^seeds *=.*|seeds = \"$SEEDS\"|" $HOME/.pocket/config/config.toml
   sed -i -e "s|^external_address *=.*|external_address = \"$EXTERNAL_IP:26656\"|" $HOME/.pocket/config/config.toml
-  sed -i -e "s|^keyring-backend *=.*|keyring-backend = \"test\"|" $HOME/.pocket/config/client.toml
+  sed -i -e "s|^keyring-backend *=.*|keyring-backend = \"file\"|" $HOME/.pocket/config/client.toml
 
   print_color $BOLD_GREEN "✅ Node initialized successfully."
 fi
