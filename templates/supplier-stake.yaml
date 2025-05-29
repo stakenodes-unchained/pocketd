@@ -1,0 +1,30 @@
+owner_address: <owner_address>
+operator_address: <operator_address>
+stake_amount: 60000000000upokt
+default_rev_share_percent:
+  <owner_address>: 25
+  <revshare_address>: 75
+services:
+  - service_id: avax
+    endpoints:
+      - publicly_exposed_url: https://relayminer.example.com
+        rpc_type: JSON_RPC
+  - service_id: eth
+    endpoints:
+      - publicly_exposed_url: https://relayminer.example.com
+        rpc_type: JSON_RPC
+      - publicly_exposed_url: https://relayminer.example.com
+        rpc_type: GRPC
+  - service_id: Poly
+    endpoints:
+      - publicly_exposed_url: https://relayminer.example.com
+        rpc_type: JSON_RPC
+    rev_share_percent:
+      <owner_address>: 10
+      <revshare_address>: 90
+  - service_id: boba
+    endpoints:
+      - publicly_exposed_url: https://relayminer.example.com
+        rpc_type: GRPC
+    rev_share_percent:
+      <revshare_address>: 100
