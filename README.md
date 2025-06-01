@@ -1,5 +1,29 @@
 # Pocket Node Docker Setup
 
+## 📚 Table of Contents
+
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Hardware Requirements](#hardware-requirements)
+- [Environment Variables](#environment-variables)
+  - [Required Runtime Environment Variables](#required-runtime-environment-variables)
+- [Scripts](#scripts)
+- [Notes](#notes)
+- [Quick Start](#quick-start)
+- [Advanced Configuration](#advanced-configuration)
+  - [`app.toml`](#apptoml)
+  - [`client.toml`](#clienttoml)
+  - [`config.toml`](#configtoml)
+- [Pro Tip: Editing Configs Without Stopping the Node](#pro-tip-editing-configs-without-stopping-the-node)
+- [🛰️ RelayMiner Setup Guide](#️-relayminer-setup-guide)
+  - [1. Prepare Your Supplier Stake File](#1-prepare-your-supplier-stake-file)
+  - [2. Prepare the RelayMiner Config File](#2-prepare-the-relayminer-config-file)
+  - [3. Enable RelayMiner](#3-enable-relayminer)
+  - [4. Countdown for Keyring and Config File](#4-countdown-for-keyring-and-config-file)
+  - [5. Key Passphrase Setup](#5-key-passphrase-setup)
+- [License](#license)
+
 <p align="center">
   <img alt="Docker" src="https://img.shields.io/badge/Built%20with-Docker-blue?logo=docker" />
   <img alt="Platform" src="https://img.shields.io/badge/Platform-Linux-yellow?logo=linux" />
@@ -189,6 +213,66 @@ Once inside:
    ```
 
 > ⚡ Note: Some changes (especially network binding changes) may still require a full `docker compose down && up -d` restart.
+
+## 🛰️ RelayMiner Setup Guide
+
+RelayMiner is **disabled by default** to support node operators who may not need it. If you intend to run RelayMiner, you must explicitly enable it and follow the steps below to ensure a successful launch.
+
+### 1. Prepare Your Supplier Stake File
+
+RelayMiner requires an active supplier stake to function.
+
+- A sample `supplier-stake.yaml` is available in the `templates/` directory.
+- Modify the values to suit your setup.
+- Copy the file into the Pocket node container using:
+  ```bash
+  docker cp supplier-stake.yaml pocketd-node:/tmp/supplier-stake.yaml
+  ```
+
+### 2. Prepare the RelayMiner Config File
+
+- Modify the sample `relayminer-config.yaml` found in the `templates/` directory.
+- This file includes important parameters such as service IDs, backend RPC URLs, and signing key names.
+
+> 🛠️ **It’s highly recommended you prepare this file before enabling RelayMiner**, as the container will enter a limited wait loop at startup expecting the file to exist.
+
+### 3. Enable RelayMiner
+
+To activate the service:
+
+- In your `docker-compose.yml`, set:
+  ```yaml
+  ENABLE_RELAYMINER=true
+  ```
+- If the container previously started with `false`, remove it and start it again:
+  ```bash
+  docker compose rm relayminer
+  docker compose up -d relayminer
+  ```
+
+### 4. Countdown for Keyring and Config File
+
+Once RelayMiner starts with `ENABLE_RELAYMINER=true`, the following validations occur:
+
+- ⏳ **Keyring Check:**  
+  The container waits up to **5 minutes** (5 attempts, 60s intervals) for keys to exist in the `keyring-file` directory.  
+  You can enter the container and add keys manually:
+  ```bash
+  docker exec -it relayminer sh
+  pocketd keys add <key_name>
+  pocketd keys add <key_name> --recover
+  ```
+
+- 📄 **Config File Check:**  
+  RelayMiner also waits up to **5 minutes** (5 attempts, 60s intervals) for `relayminer-config.yaml` to appear at:  
+  `/home/pocket/.pocket/relayminer-config.yaml`
+
+If either of these is missing or empty after their respective countdowns, the container will terminate with an error.
+
+### 5. Key Passphrase Setup
+
+Make sure `POCKET_KEYRING_PASSPHRASE` is set in the environment for non-interactive unlocking of your key during container startup.
+
 
 ## License
 
