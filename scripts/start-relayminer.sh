@@ -41,7 +41,7 @@ while [ ! -f "$CONFIG_PATH" ]; do
   sleep $WAIT_TIME
   ATTEMPT=$((ATTEMPT+1))
   if [ "$ATTEMPT" -gt "$MAX_ATTEMPTS" ]; then
-    print_color $RED "❌ RelayMiner config file was not found after 2 minutes. Exiting."
+    print_color $RED "❌ RelayMiner config file was not found after 5 minutes. Exiting."
     exit 1
   fi
 done
@@ -54,7 +54,7 @@ while [ ! -d "$KEYRING_DIR" ] || [ -z "$(ls -A "$KEYRING_DIR" 2>/dev/null)" ]; d
   sleep $WAIT_TIME
   ATTEMPT=$((ATTEMPT+1))
   if [ "$ATTEMPT" -gt "$MAX_ATTEMPTS" ]; then
-    print_color $RED "❌ Keyring folder remained empty after 2 minutes. Exiting."
+    print_color $RED "❌ Keyring folder remained empty after 5 minutes. Exiting."
     exit 1
   fi
 done
@@ -69,7 +69,7 @@ until curl -sf "$POCKET_RPC_URL" >/dev/null; do
   sleep $WAIT_TIME
   ATTEMPT=$((ATTEMPT+1))
   if [ "$ATTEMPT" -gt "$MAX_ATTEMPTS" ]; then
-    print_color $RED "❌ Pocket RPC not reachable at $POCKET_RPC_URL after 2 minutes. Exiting."
+    print_color $RED "❌ Pocket RPC not reachable at $POCKET_RPC_URL after 5 minutes. Exiting."
     exit 1
   fi
 done
