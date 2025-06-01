@@ -17,7 +17,6 @@ print_color() {
 trap 'print_color $RED "🛑 Pocket Node stopped."' EXIT
 
 # --- Stage 1: Initialization Info ---
-# --- Stage 1: Initialization Info ---
 print_color $GREEN "🧱 Bootstrapping Pocket Node..."
 print_color $YELLOW "🛠  NETWORK: ${NETWORK}"
 print_color $YELLOW "🛠  NODE_MONIKER: ${NODE_MONIKER}"
@@ -29,7 +28,7 @@ print_color $YELLOW "🛠  EXTERNAL_IP: ${EXTERNAL_IP}"
 : "${POCKETD_LOG_LEVEL:?Environment variable POCKETD_LOG_LEVEL not set.}"
 
 # --- Stage 3: Run initialization script (if needed) ---
-/init-pocket-node.sh
+/scripts/init-pocket-node.sh
 
 # --- Stage 4: Start cosmovisor with full startup flags ---
 print_color $GREEN "🚀 Starting cosmovisor with configured options..."
@@ -38,4 +37,9 @@ exec cosmovisor run start \
   --rpc.laddr="tcp://0.0.0.0:26657" \
   --p2p.laddr="tcp://0.0.0.0:26656" \
   --p2p.external-address="${EXTERNAL_IP}:26656" \
+  --api.enable \
+  --api.address="tcp://0.0.0.0:1317" \
+  --api.enabled-unsafe-cors \
+  --grpc.enable \
+  --grpc.address="0.0.0.0:9090" \
   --log_level="${POCKETD_LOG_LEVEL}"
