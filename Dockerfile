@@ -46,9 +46,9 @@ RUN set -e && \
     ln -sf ${DAEMON_HOME}/cosmovisor/genesis ${DAEMON_HOME}/cosmovisor/current && \
     ln -sf ${DAEMON_HOME}/cosmovisor/current/bin/pocketd /home/${POCKET_USER}/.local/bin/pocketd
 
-# Add startup scripts
-COPY --chown=${POCKET_USER}:${POCKET_USER} start-node.sh init-pocket-node.sh /
-RUN chmod +x /start-node.sh /init-pocket-node.sh
+# Copy all scripts in the container
+COPY --chown=${POCKET_USER}:${POCKET_USER} scripts/ /scripts/
+RUN chmod +x /scripts/*.sh
 
 # Expose ports
-EXPOSE 1317 26656 26657 26660
+EXPOSE 9090 1317 26656 26657 26660
