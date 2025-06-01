@@ -1,15 +1,15 @@
 default_signing_key_names:
-  - <OPERATOR_KEY_NAME> # name of the operator key in the keyring
+  - <operator_key_name> # name of the operator key in the keyring
 smt_store_path: /home/pocket/.pocket/smt
 pocket_node:
   query_node_rpc_url: tcp://pocketd-node:26657
   query_node_grpc_url: tcp://pocketd-node:9090
   tx_node_rpc_url: tcp://pocketd-node:26657
 suppliers:
-  - service_id: <SERVICE_ID> # target blockchain service id (e.g. eth)
+  - service_id: <service_id> # target blockchain service id (e.g. eth)
     listen_url: http://0.0.0.0:8545
     service_config:
-      backend_url: <BACKEND_RPC_URL> # RPC endpoint of the target blockchain
+      backend_url: <service_rpc_url> # RPC endpoint of the target blockchain
 metrics:
   enabled: true
   addr: :9090
