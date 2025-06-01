@@ -4,11 +4,12 @@ services:
   init-volumes:
     image: alpine:3.18
     container_name: pocketd-volume-init
-    command: chown -R 1025:1025 /data /config /keyring-file
+    command: chown -R 1025:1025 /data /config /keyring /relayminer
     volumes:
       - pocketd_data:/data
       - pocketd_config:/config
-      - pocketd_keyring:/keyring-file
+      - pocketd_keyring:/keyring
+      - relayminer_home:/relayminer
     restart: "no"
 
   pocketd:
@@ -17,7 +18,7 @@ services:
     image: pocketd:v0.1.13
     container_name: pocketd-node
     user: 1025:1025
-    entrypoint: ["bash", "/start-node.sh"]
+    entrypoint: ["bash", "/scripts/start-node.sh"]
     depends_on:
       - init-volumes
     restart: unless-stopped
@@ -33,6 +34,8 @@ services:
       - POCKETD_LOG_LEVEL=info
       - USE_SNAPSHOT=true
     ports:
+      - "9090:9090"    # GRPC
+      - "1317:1317"    # API
       - "26656:26656"  # P2P
       - "26657:26657"  # RPC
       - "26660:26660"  # Prometheus metrics
@@ -41,7 +44,25 @@ services:
       - pocketd_config:/home/pocket/.pocket/config
       - pocketd_keyring:/home/pocket/.pocket/keyring-file
 
+  relayminer:
+    image: pocketd:v0.1.13
+    container_name: relayminer
+    user: 1025:1025
+    entrypoint: ["bash", "/scripts/start-relayminer.sh"]
+    restart: "no"
+    environment:
+      - CHAIN_ID=
+      - ENABLE_RELAYMINER=false
+      - POCKET_KEYRING_PASSPHRASE=
+    ports:
+      - "8545:8545"  # RPC
+    depends_on:
+      - pocketd
+    volumes:
+      - relayminer_home:/home/pocket/.pocket
+
 volumes:
   pocketd_data:
   pocketd_config:
   pocketd_keyring:
+  relayminer_home:
