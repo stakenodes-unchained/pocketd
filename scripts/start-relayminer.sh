@@ -14,6 +14,11 @@ print_color() {
   echo -e "${COLOR}${BOLD}${MESSAGE}${NC}"
 }
 
+# Validate Environment Variables
+: "${CHAIN_ID:?Environment variable CHAIN_ID not set.}"
+: "${ENABLE_RELAYMINER:?Environment variable ENABLE_RELAYMINER not set.}"
+: "${POCKET_KEYRING_PASSPHRASE:?Environment variable POCKET_KEYRING_PASSPHRASE not set.}"
+
 # Display environment variables
 print_color $YELLOW "🔁 ENABLE_RELAYMINER: ${ENABLE_RELAYMINER}"
 print_color $YELLOW "🔗 CHAIN_ID: ${CHAIN_ID}"
