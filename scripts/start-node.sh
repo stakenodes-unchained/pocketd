@@ -42,4 +42,11 @@ exec cosmovisor run start \
   --api.enabled-unsafe-cors \
   --grpc.enable \
   --grpc.address="0.0.0.0:9090" \
+  --minimum-gas-prices="0.000000001upokt"
+  --api.max-open-connections=1000 \
+  --api.rpc-read-timeout=120 \
+  --api.rpc-write-timeout=120 \
+  --api.rpc-max-body-bytes=1000000 \
+  --api.swagger=false \
+  --mempool.max-txs=10000 \
   --log_level="${POCKETD_LOG_LEVEL}"
