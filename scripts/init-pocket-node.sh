@@ -65,10 +65,30 @@ else
 
   "$POCKET_BIN" init "$NODE_MONIKER" --chain-id="$CHAIN_ID" --home=$HOME/.pocket >/dev/null 2>&1
   cp "$GENESIS_FILE" $HOME/.pocket/config/genesis.json
+  sed -i -e 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.000000001upokt"|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^swagger *=.*|swagger = false|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^rpc-max-body-bytes *=.*|rpc-max-body-bytes = 1000000|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^rpc-read-timeout *=.*|rpc-read-timeout = 120|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^rpc-write-timeout *=.*|rpc-write-timeout = 120|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^enabled-unsafe-cors *=.*|enabled-unsafe-cors = true|' $HOME/.pocket/config/app.tomll
+  sed -i -e 's|^max-recv-msg-size *=.*|max-recv-msg-size = "2147483647"|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^max-txs *=.*|max-txs = 10000|' $HOME/.pocket/config/app.toml
+  sed -i -e 's|^prometheus-retention-time *=.*|prometheus-retention-time = "1800"|' $HOME/.pocket/config/app.toml
+  echo '' >> $HOME/.pocket/config/app.toml
+  echo '[rpc]' >> $HOME/.pocket/config/app.toml
+  echo '  cors_allowed_origins = ["*"]' >> $HOME/.pocket/config/app.toml
   sed -i -e "s|^seeds *=.*|seeds = \"$SEEDS\"|" $HOME/.pocket/config/config.toml
   sed -i -e "s|^external_address *=.*|external_address = \"$EXTERNAL_IP:26656\"|" $HOME/.pocket/config/config.toml
+  sed -i -e 's|^cors_allowed_origins *=.*|cors_allowed_origins = ["*", ]|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^timeout_broadcast_tx_commit *=.*|timeout_broadcast_tx_commit = "300s"|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^max_body_bytes *=.*|max_body_bytes = 1000000000|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^max_header_bytes *=.*|max_header_bytes = 5242880|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^send_rate *=.*|send_rate = 5120000|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^recv_rate *=.*|recv_rate = 5120000|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^timeout_propose *=.*|timeout_propose = "5m0s"|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^timeout_commit *=.*|timeout_commit = "5m0s"|' $HOME/.pocket/config/config.toml
+  sed -i -e 's|^max_tx_bytes *=.*|max_tx_bytes = 100000000|' $HOME/.pocket/config/config.toml
   sed -i -e "s|^keyring-backend *=.*|keyring-backend = \"file\"|" $HOME/.pocket/config/client.toml
-
   print_color $BOLD_GREEN "✅ Node initialized successfully."
 fi
 
@@ -90,7 +110,7 @@ if { [ "$USE_SNAPSHOT" = "true" ] || [ "$RESNAPSHOT" = "true" ]; }; then
   if [ "$RESNAPSHOT" = "true" ]; then
     print_color $BOLD_YELLOW "♻️ RESNAPSHOT=true. Forcing snapshot reset."
     rm -rf "$DATA_DIR"/*
-  elif [ "${DATA_USAGE_MB:-0}" -ge 1024 ]; then
+  elif [ "${DATA_USAGE_MB:-0}" -ge 10240 ]; then
     print_color $BOLD_YELLOW "⚠️ Skipping snapshot: data already populated (${DATA_USAGE_MB}MB)."
     exit 0
   fi
