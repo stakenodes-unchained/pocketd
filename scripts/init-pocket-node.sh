@@ -70,7 +70,7 @@ else
   sed -i -e 's|^rpc-max-body-bytes *=.*|rpc-max-body-bytes = 1000000|' $HOME/.pocket/config/app.toml
   sed -i -e 's|^rpc-read-timeout *=.*|rpc-read-timeout = 120|' $HOME/.pocket/config/app.toml
   sed -i -e 's|^rpc-write-timeout *=.*|rpc-write-timeout = 120|' $HOME/.pocket/config/app.toml
-  sed -i -e 's|^enabled-unsafe-cors *=.*|enabled-unsafe-cors = true|' $HOME/.pocket/config/app.tomll
+  sed -i -e 's|^enabled-unsafe-cors *=.*|enabled-unsafe-cors = true|' $HOME/.pocket/config/app.toml
   sed -i -e 's|^max-recv-msg-size *=.*|max-recv-msg-size = "2147483647"|' $HOME/.pocket/config/app.toml
   sed -i -e 's|^max-txs *=.*|max-txs = 10000|' $HOME/.pocket/config/app.toml
   sed -i -e 's|^prometheus-retention-time *=.*|prometheus-retention-time = "1800"|' $HOME/.pocket/config/app.toml
