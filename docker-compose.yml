@@ -33,6 +33,7 @@ services:
       - NODE_MONIKER=
       - POCKETD_LOG_LEVEL=info
       - USE_SNAPSHOT=true
+      - SNAPSHOT_TYPE=archival
     ports:
       - "9090:9090"    # GRPC
       - "1317:1317"    # API
@@ -53,7 +54,7 @@ services:
     environment:
       - CHAIN_ID=
       - ENABLE_RELAYMINER=false
-      - POCKET_KEYRING_PASSPHRASE=
+      - KEYRING_BACKEND=
     ports:
       - "8545:8545"  # RPC
     depends_on:
