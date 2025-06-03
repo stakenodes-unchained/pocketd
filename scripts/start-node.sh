@@ -42,7 +42,7 @@ exec cosmovisor run start \
   --api.enabled-unsafe-cors \
   --grpc.enable \
   --grpc.address="0.0.0.0:9090" \
-  --minimum-gas-prices="0.000000001upokt"
+  --minimum-gas-prices="0.000000001upokt" \
   --api.max-open-connections=1000 \
   --api.rpc-read-timeout=120 \
   --api.rpc-write-timeout=120 \
