@@ -30,7 +30,19 @@ print_color $YELLOW "🛠  EXTERNAL_IP: ${EXTERNAL_IP}"
 # --- Stage 3: Run initialization script (if needed) ---
 /scripts/init-pocket-node.sh
 
-# --- Stage 4: Start cosmovisor with full startup flags ---
+# --- Stage 4: Get skip upgrade heights (if any) ---
+POCKET_NETWORK_GENESIS_BRANCH="${POCKET_NETWORK_GENESIS_BRANCH:-master}"
+BASE_URL="https://raw.githubusercontent.com/pokt-network/pocket-network-genesis/${POCKET_NETWORK_GENESIS_BRANCH}/shannon/${NETWORK}"
+SKIP_UPGRADES_HEIGHTS_URL="${BASE_URL}/skip_upgrade_heights"
+
+SKIP_UPGRADES=""
+SKIP_UPGRADE_HEIGHTS=$(curl -s "$SKIP_UPGRADES_HEIGHTS_URL")
+if [ -n "$SKIP_UPGRADE_HEIGHTS" ]; then
+  print_color $YELLOW "⏭️  Skipping upgrade heights: $SKIP_UPGRADE_HEIGHTS"
+  SKIP_UPGRADES="--unsafe-skip-upgrades $SKIP_UPGRADE_HEIGHTS"
+fi
+
+# --- Stage 5: Start cosmovisor with full startup flags ---
 print_color $GREEN "🚀 Starting cosmovisor with configured options..."
 exec cosmovisor run start \
   --home="$DAEMON_HOME" \
@@ -49,4 +61,5 @@ exec cosmovisor run start \
   --api.rpc-max-body-bytes=1000000 \
   --api.swagger=false \
   --mempool.max-txs=10000 \
-  --log_level="${POCKETD_LOG_LEVEL}"
+  --log_level="${POCKETD_LOG_LEVEL}" \
+  $SKIP_UPGRADES
