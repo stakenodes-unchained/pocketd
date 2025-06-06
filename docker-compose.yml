@@ -15,7 +15,7 @@ services:
   pocketd:
     build:
       context: .
-    image: pocketd:v0.1.13
+    image: pocketd:v0.1.17
     container_name: pocketd-node
     user: 1025:1025
     entrypoint: ["bash", "/scripts/start-node.sh"]
@@ -46,7 +46,7 @@ services:
       - pocketd_keyring:/home/pocket/.pocket/keyring-file
 
   relayminer:
-    image: pocketd:v0.1.13
+    image: pocketd:v0.1.17
     container_name: relayminer
     user: 1025:1025
     entrypoint: ["bash", "/scripts/start-relayminer.sh"]
