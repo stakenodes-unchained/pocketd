@@ -1,0 +1,5 @@
+pocketd_home/
+relayminer_home/
+node_key.json
+priv_validator_key.json
+genesis.json
