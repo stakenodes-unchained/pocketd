@@ -5,6 +5,9 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BOLD='\033[1m'
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_YELLOW="${BOLD}${YELLOW}"
 NC='\033[0m'
 
 print_color() {
@@ -13,24 +16,28 @@ print_color() {
   echo -e "${COLOR}${MESSAGE}${NC}"
 }
 
-# Trap to detect if container stops
+# 🏮 Trap to detect if container stops
 trap 'print_color $RED "🛑 Pocket Node stopped."' EXIT
 
-# --- Stage 1: Initialization Info ---
-print_color $GREEN "🧱 Bootstrapping Pocket Node..."
-print_color $YELLOW "🛠  NETWORK: ${NETWORK}"
-print_color $YELLOW "🛠  NODE_MONIKER: ${NODE_MONIKER}"
-print_color $YELLOW "🛠  USE_SNAPSHOT: ${USE_SNAPSHOT}"
-print_color $YELLOW "🛠  EXTERNAL_IP: ${EXTERNAL_IP}"
-
-# --- Stage 2: Validate Environment Variables ---
+# 🧱 Stage 1: Initialization Info
 : "${DAEMON_HOME:?Environment variable DAEMON_HOME not set.}"
 : "${POCKETD_LOG_LEVEL:?Environment variable POCKETD_LOG_LEVEL not set.}"
 
-# --- Stage 3: Run initialization script (if needed) ---
+print_color $BOLD_GREEN "🧱 Bootstrapping Pocket Node..."
+print_color $BOLD_YELLOW "🛠  NETWORK: ${NETWORK}"
+print_color $BOLD_YELLOW "🛠  NODE_MONIKER: ${NODE_MONIKER}"
+print_color $BOLD_YELLOW "🛠  EXTERNAL_IP: ${EXTERNAL_IP}"
+print_color $BOLD_YELLOW "🛠  POCKETD_LOG_LEVEL: ${POCKETD_LOG_LEVEL}"
+print_color $BOLD_YELLOW "🛠  DAEMON_HOME: ${DAEMON_HOME}"
+
+# 🏁 Stage 2: Run initialization script
+if [ ! -x /scripts/init-pocket-node.sh ]; then
+  print_color $RED "❌ /scripts/init-pocket-node.sh is missing or not executable. Exiting."
+  exit 1
+fi
 /scripts/init-pocket-node.sh
 
-# --- Stage 4: Get skip upgrade heights (if any) ---
+# ⏭️ Stage 3: Get skip upgrade heights (if any)
 POCKET_NETWORK_GENESIS_BRANCH="${POCKET_NETWORK_GENESIS_BRANCH:-master}"
 BASE_URL="https://raw.githubusercontent.com/pokt-network/pocket-network-genesis/${POCKET_NETWORK_GENESIS_BRANCH}/shannon/${NETWORK}"
 SKIP_UPGRADES_HEIGHTS_URL="${BASE_URL}/skip_upgrade_heights"
@@ -42,7 +49,7 @@ if [ -n "$SKIP_UPGRADE_HEIGHTS" ]; then
   SKIP_UPGRADES="--unsafe-skip-upgrades $SKIP_UPGRADE_HEIGHTS"
 fi
 
-# --- Stage 5: Start cosmovisor with full startup flags ---
+# 🚀 Stage 4: Start cosmovisor with full startup flags
 print_color $GREEN "🚀 Starting cosmovisor with configured options..."
 exec cosmovisor run start \
   --home="$DAEMON_HOME" \
