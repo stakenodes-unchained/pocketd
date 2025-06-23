@@ -93,8 +93,8 @@ else
   sed -i -e 's|^max_header_bytes *=.*|max_header_bytes = 5242880|' $DAEMON_HOME/config/config.toml
   sed -i -e 's|^send_rate *=.*|send_rate = 5120000|' $DAEMON_HOME/config/config.toml
   sed -i -e 's|^recv_rate *=.*|recv_rate = 5120000|' $DAEMON_HOME/config/config.toml
-  sed -i -e 's|^timeout_propose *=.*|timeout_propose = "5m0s"|' $DAEMON_HOME/config/config.toml
-  sed -i -e 's|^timeout_commit *=.*|timeout_commit = "5m0s"|' $DAEMON_HOME/config/config.toml
+  sed -i -e 's|^timeout_propose *=.*|timeout_propose = "15s"|' $DAEMON_HOME/config/config.toml
+  sed -i -e 's|^timeout_commit *=.*|timeout_commit = "30s"|' $DAEMON_HOME/config/config.toml
   sed -i -e 's|^max_tx_bytes *=.*|max_tx_bytes = 100000000|' $DAEMON_HOME/config/config.toml
   sed -i -e "s|^keyring-backend *=.*|keyring-backend = \"file\"|" $DAEMON_HOME/config/client.toml
 
