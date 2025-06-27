@@ -13,7 +13,7 @@ services:
   pocketd:
     build:
       context: .
-    image: pocketd:v0.1.17
+    image: pocketd:v0.1.24
     container_name: pocketd-node
     user: 1025:1025
     entrypoint: ["bash", "/scripts/start-node.sh"]
@@ -42,18 +42,19 @@ services:
       - pocketd_home:/home/pocket/.pocket
 
   relayminer:
-    image: pocketd:v0.1.17
+    image: pocketd:v0.1.24
     container_name: relayminer
     user: 1025:1025
     entrypoint: ["bash", "/scripts/start-relayminer.sh"]
     restart: "no"
     environment:
+      - PATH=/usr/local/cosmovisor/genesis/bin:$PATH
       - CHAIN_ID=
       - ENABLE_RELAYMINER=false
       - KEYRING_BACKEND=
     ports:
       - "8545:8545"  # RPC
-      - "9100:9100"  # Prometheus metrics
+      - "9000:9000"  # Prometheus metrics
     depends_on:
       - pocketd
     volumes:
