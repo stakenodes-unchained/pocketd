@@ -14,6 +14,8 @@ print_color() {
   echo -e "${COLOR}${BOLD}${MESSAGE}${NC}"
 }
 
+export PATH="/usr/local/cosmovisor/genesis/bin:$PATH"
+
 # 🚦 Stage 1: Early Exit if Disabled
 if [ "${ENABLE_RELAYMINER}" = "false" ]; then
   print_color $YELLOW "⚠️ RelayMiner is not needed and will be terminated."
@@ -30,6 +32,7 @@ KEYRING_BACKEND="${KEYRING_BACKEND:-os}"
 
 print_color $YELLOW "🔁 ENABLE_RELAYMINER: ${ENABLE_RELAYMINER}"
 print_color $YELLOW "🔗 CHAIN_ID: ${CHAIN_ID}"
+print_color $YELOOW "🛠  POCKETD_VERSION: $(pocketd version)"
 
 # 🔑 Stage 3: Keyring Backend & Passphrase Validation
 if [[ "$KEYRING_BACKEND" != "test" && -z "$POCKET_KEYRING_PASSPHRASE" ]]; then
@@ -44,7 +47,9 @@ if [ ! -f "$DAEMON_HOME/config/client.toml" ]; then
 fi
 
 # Update keyring-backend in client.toml (suppress errors if file doesn't exist yet)
-sed -i -e "s|^keyring-backend *=.*|keyring-backend = \"${KEYRING_BACKEND}\"|" "$DAEMON_HOME/config/client.toml" 2>/dev/null || true
+sed -i -e 's|^timeout_propose *=.*|timeout_propose = "15s"|' $DAEMON_HOME/config/config.toml
+sed -i -e 's|^timeout_commit *=.*|timeout_commit = "30s"|' $DAEMON_HOME/config/config.toml
+sed -i -e "s|^keyring-backend *=.*|keyring-backend = \"${KEYRING_BACKEND}\"|" "$DAEMON_HOME/config/client.toml"
 
 # 🔒 Stage 5: Keyring Directory Check (for 'file' and 'test')
 KEYRING_DIR=""
@@ -114,8 +119,8 @@ if [[ "$KEYRING_BACKEND" == "test" ]]; then
     --home="$DAEMON_HOME" \
     --keyring-backend="${KEYRING_BACKEND}" \
     --node="${POCKET_NODE_URL}" \
-    --gas-adjustment=1.5 \
-    --gas-prices=0.001upokt
+    --gas-adjustment=1.7 \
+    --gas-prices=0.000001upokt
 else
   exec bash -c "echo \"\$POCKET_KEYRING_PASSPHRASE\" | pocketd \
     relayminer start \
@@ -126,6 +131,6 @@ else
     --home=\"$DAEMON_HOME\" \
     --keyring-backend=\"${KEYRING_BACKEND}\" \
     --node=\"${POCKET_NODE_URL}\" \
-    --gas-adjustment=1.1 \
-    --gas-prices=0.001upokt"
+    --gas-adjustment=1.7 \
+   --gas-prices=0.000001upokt"
 fi
