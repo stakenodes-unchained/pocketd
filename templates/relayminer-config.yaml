@@ -12,7 +12,7 @@ suppliers:
       backend_url: <service_rpc_url> # RPC endpoint of the target blockchain
 metrics:
   enabled: true
-  addr: :9100
+  addr: :9000
 pprof:
   enabled: false
   addr: localhost:6060
