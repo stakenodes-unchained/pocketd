@@ -13,7 +13,7 @@ services:
   pocketd:
     build:
       context: .
-    image: pocketd:v0.1.26
+    image: pocketd:v0.1.29
     container_name: pocketd-node
     user: 1025:1025
     entrypoint: ["bash", "/scripts/start-node.sh"]
@@ -42,7 +42,7 @@ services:
       - pocketd_home:/home/pocket/.pocket
 
   relayminer:
-    image: pocketd:v0.1.26
+    image: pocketd:v0.1.29
     container_name: relayminer
     user: 1025:1025
     entrypoint: ["bash", "/scripts/start-relayminer.sh"]
