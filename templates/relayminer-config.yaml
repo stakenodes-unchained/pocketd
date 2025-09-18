@@ -1,6 +1,9 @@
 default_signing_key_names:
   - <operator_key_name> # name of the operator key in the keyring
-smt_store_path: /home/pocket/.pocket/smt
+default_request_timeout_seconds: 25
+default_max_body_size: 30MB
+smt_store_path: ":memory:"
+enable_over_servicing: true
 pocket_node:
   query_node_rpc_url: tcp://pocketd-node:26657
   query_node_grpc_url: tcp://pocketd-node:9090
